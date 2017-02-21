@@ -3,18 +3,17 @@
 Proyecto simple que nos permite crear una Api basada en la parte de campus de AOD
 
 ## Instalacion y primera ejecucion
-1. Clonamos el repositorio 
+1.Clonamos el repositorio 
 ```
 git clone https://github.com/aragonopendata/Campus-api.git
 ```
 
-2. Instalamos dart: [Link](https://www.dartlang.org/install)
+2.Instalamos dart: [Link](https://www.dartlang.org/install)
 
-3. Instalamos Jaguar
+3.Instalamos Jaguar
 ```
 pub global activate jaguar
 ```
-
 4.Creamos un archivo llamado settings.yaml en la raiz y lo completamos con los siguientes datos
 ```yaml
 svport: '<Puerto preferido>'
@@ -25,22 +24,22 @@ dburl: '<Url de la base de datos>'
 dbname: '<Nombre de la base de datos>'
 ```
 
-5. Obtenemos todas las dependencias necesarioas
+5.Obtenemos todas las dependencias necesarioas
 ```
 pub get
 ```
 
-6. Ejecutamos la herramienta de jaguar para que genere los archivos necesarios
+6.Ejecutamos la herramienta de jaguar para que genere los archivos necesarios
 ```
 jaguar build
 ```
 
-7. Ejecutamos nuestra Api 
+7.Ejecutamos nuestra Api 
 ```
 dart bin/server.dart -s settings.yaml
 ```
 
-8. Ya podemos acceder a nuestra api desde localhost
+8.Ya podemos acceder a nuestra api desde localhost
 ```
 localhost:<svport>/campus/version
 ```
