@@ -1,0 +1,21 @@
+bin:
+  'bin/server.dart'
+
+apis:
+  - 'lib/api.dart'
+serializers:
+  - lib/db/model/contenido.dart
+  - lib/db/model/contenido_tiene_tema.dart
+  - lib/db/model/evento.dart
+  - lib/db/model/formato.dart
+  - lib/db/model/plataforma.dart
+  - lib/db/model/tema.dart
+  - lib/db/model/tipo.dart
+beans:
+  - lib/db/bean/contenidoBean.dart
+  - lib/db/bean/contenido_tiene_temaBean.dart
+  - lib/db/bean/eventoBean.dart
+  - lib/db/bean/formatoBean.dart
+  - lib/db/bean/plataformaBean.dart
+  - lib/db/bean/temaBean.dart
+  - lib/db/bean/tipoBean.dart

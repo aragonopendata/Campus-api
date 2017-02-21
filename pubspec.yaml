@@ -1,0 +1,9 @@
+name: campusAPI
+version: 1.0.0
+description: API de campus para AOD
+dependencies:
+  jaguar: 0.4.2
+  jaguar_orm: 0.0.1
+  jaguar_serializer: 0.1.9
+  jaguar_query_postgresql: 0.0.1
+  jaguar_postgresql: 0.4.0
