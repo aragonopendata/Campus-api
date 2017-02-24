@@ -13,8 +13,7 @@ class ContenidoBean extends _ContenidoBean implements Bean<Contenido> {
   /*@Find()
   Future<Stream<Contenido>> findById(@WhereEq() int id) => super.findById(id);*/
 
-  Future<Map> findById(
-      int id) async {
+  Future<Map> findById(int id) async {
     FindStatement _finder = finderQ.where(this.id.eq(id));
     List<Map> _maps = await (await adapter.find(_finder)).toList();
 
@@ -46,31 +45,33 @@ class ContenidoBean extends _ContenidoBean implements Bean<Contenido> {
     return _contenidos;
   }
 
-  Future<List<Map>> findWithOptionals(
-      int limit, int offset, Map parameters) async {
+  Future<List<Map>> findWithOptionals(int limit, int offset,
+      {Map parameters}) async {
     FindStatement _finder = finderQ.orderBy('id').limit(limit).offset(offset);
 
-    if (parameters['formato'] != null) {
-      _finder.where(this.formato.eq(parameters['formato']));
-    }
-    if (parameters['plataforma'] != null) {
-      _finder.where(this.plataforma.eq(parameters['plataforma']));
-    }
-    if (parameters['evento'] != null) {
-      _finder.where(this.evento.eq(parameters['evento']));
-    }
-    if (parameters['aparece'] != null) {
-      _finder.where(this.aparece.eq(parameters['aparece']));
-    }
-    if (parameters['tipo'] != null) {
-      _finder.where(this.tipo.eq(parameters['tipo']));
-    }
-    if (parameters['tema'] != null) {
-      _finder
-          .select('contenido.*')
-          .leftJoin(ContenidoTieneTema.tableName, 'ct')
-          .joinOn(eq('contenido.id', C('ct.contenido')))
-          .where(eqInt('ct.tema', parameters['tema']));
+    if (parameters != null) {
+      if (parameters['formato'] != null) {
+        _finder.where(this.formato.eq(parameters['formato']));
+      }
+      if (parameters['plataforma'] != null) {
+        _finder.where(this.plataforma.eq(parameters['plataforma']));
+      }
+      if (parameters['evento'] != null) {
+        _finder.where(this.evento.eq(parameters['evento']));
+      }
+      if (parameters['aparece'] != null) {
+        _finder.where(this.aparece.eq(parameters['aparece']));
+      }
+      if (parameters['tipo'] != null) {
+        _finder.where(this.tipo.eq(parameters['tipo']));
+      }
+      if (parameters['tema'] != null) {
+        _finder
+            .select('contenido.*')
+            .leftJoin(ContenidoTieneTema.tableName, 'ct')
+            .joinOn(eq('contenido.id', C('ct.contenido')))
+            .where(eqInt('ct.tema', parameters['tema']));
+      }
     }
 
     List<Map> _maps = await (await adapter.find(_finder)).toList();
@@ -103,47 +104,47 @@ class ContenidoBean extends _ContenidoBean implements Bean<Contenido> {
     return _contenidos;
   }
 
-  findAllPonentes() async{
+  Future<Stream<Contenido>> findAllPonentes() async {
     FindStatement _finder = finderQ.select('aparece').groupBy('aparece');
     return execFind(_finder);
   }
 
-  getEventoFromId(int id) async {
+  Future<Evento> getEventoFromId(int id) async {
     EventoBean bean = new EventoBean(adapter);
     Stream<Evento> stream = await bean.findById(id);
     List streamList = await stream.toList();
     return streamList[0];
   }
 
-  getTipoFromId(int id) async {
+  Future<Tipo> getTipoFromId(int id) async {
     TipoBean bean = new TipoBean(adapter);
     Stream<Tipo> stream = await bean.findById(id);
     List streamList = await stream.toList();
     return streamList[0];
   }
 
-  getFormatoFromId(int id) async {
+  Future<Formato> getFormatoFromId(int id) async {
     FormatoBean bean = new FormatoBean(adapter);
     Stream<Formato> stream = await bean.findById(id);
     List streamList = await stream.toList();
     return streamList[0];
   }
 
-  getPlataformaFromId(int id) async {
+  Future<Plataforma> getPlataformaFromId(int id) async {
     PlataformaBean bean = new PlataformaBean(adapter);
     Stream<Plataforma> stream = await bean.findById(id);
     List streamList = await stream.toList();
     return streamList[0];
   }
 
-  getTemaFromId(int id) async {
+  Future<Tema> getTemaFromId(int id) async {
     TemaBean bean = new TemaBean(adapter);
     Stream<Tema> stream = await bean.findById(id);
     List streamList = await stream.toList();
     return streamList[0];
   }
 
-  getTemasFromContenido(int id) async {
+  Future<List<Tema>> getTemasFromContenido(int id) async {
     ContenidoTieneTemaBean bean = new ContenidoTieneTemaBean(adapter);
     Stream<ContenidoTieneTema> stream = await bean.findTemaFromContenido(id);
     List streamList = await stream.toList();
@@ -154,34 +155,36 @@ class ContenidoBean extends _ContenidoBean implements Bean<Contenido> {
     return temas;
   }
 
-  getCount(Map parameters) async {
-  FindStatement _finder = finderQ;
+  getCount({Map parameters}) async {
+    FindStatement _finder = finderQ;
 
-  if (parameters['formato'] != null) {
-  _finder.where(this.formato.eq(parameters['formato']));
-  }
-  if (parameters['plataforma'] != null) {
-  _finder.where(this.plataforma.eq(parameters['plataforma']));
-  }
-  if (parameters['evento'] != null) {
-  _finder.where(this.evento.eq(parameters['evento']));
-  }
-  if (parameters['aparece'] != null) {
-  _finder.where(this.aparece.eq(parameters['aparece']));
-  }
-  if (parameters['tipo'] != null) {
-  _finder.where(this.tipo.eq(parameters['tipo']));
-  }
-  if (parameters['tema'] != null) {
-  _finder
-      .count('contenido.*')
-      .leftJoin(ContenidoTieneTema.tableName, 'ct')
-      .joinOn(eq('contenido.id', C('ct.contenido')))
-      .where(eqInt('ct.tema', parameters['tema']));
-  }else{
-    _finder.count('*');
-  }
-    List<Map> _maps = await (await adapter.find(_finder)).toList();
-    return _maps;
+    if (parameters != null) {
+      if (parameters['formato'] != null) {
+        _finder.where(this.formato.eq(parameters['formato']));
+      }
+      if (parameters['plataforma'] != null) {
+        _finder.where(this.plataforma.eq(parameters['plataforma']));
+      }
+      if (parameters['evento'] != null) {
+        _finder.where(this.evento.eq(parameters['evento']));
+      }
+      if (parameters['aparece'] != null) {
+        _finder.where(this.aparece.eq(parameters['aparece']));
+      }
+      if (parameters['tipo'] != null) {
+        _finder.where(this.tipo.eq(parameters['tipo']));
+      }
+      if (parameters['tema'] != null) {
+        _finder
+            .count('contenido.*')
+            .leftJoin(ContenidoTieneTema.tableName, 'ct')
+            .joinOn(eq('contenido.id', C('ct.contenido')))
+            .where(eqInt('ct.tema', parameters['tema']));
+      } else {
+        _finder.count('*');
+      }
+    }
+    Map _map = await adapter.findOne(_finder);
+    return _map;
   }
 }

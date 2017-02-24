@@ -15,8 +15,7 @@ main(List<String> args) async {
       jaguar.Settings.getString('dbname'));
   int port = int.parse(jaguar.Settings.getString('svport'));
   //load the configuration for the server
-  Jaguar jaguarApi =
-      new Jaguar(multiThread: true, port: port);
+  Jaguar jaguarApi = new Jaguar(multiThread: true, port: port);
 
   jaguarApi.log.onRecord.listen((LogRecord rec) {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
