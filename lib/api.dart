@@ -1,7 +1,6 @@
 library api;
 
 import 'dart:async';
-//import 'dart:io';
 
 import 'package:jaguar/jaguar.dart';
 import 'package:jaguar/interceptors.dart';
@@ -15,11 +14,12 @@ var campusConnection;
 
 ///Grupo de rutas de contenido
 @RouteGroup(path: '/contenido')
-class ContenidoRouteGroup{
+class ContenidoRouteGroup {
   ContenidoBean bean;
   WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
   WrapPostgresDb postgresDb() => new WrapPostgresDb(campusConnection);
   WrapEncodeJsonableList jsonableList() => new WrapEncodeJsonableList();
+  WrapEncodeMapToJson jsonMapEncoder() => new WrapEncodeMapToJson();
 
   ///Devuelve una lista de todos los contenidos
   ///
@@ -32,9 +32,7 @@ class ContenidoRouteGroup{
   /// @param aparece Busca contenidos con la misma id de aparece
   /// @param tema Busca contenidos con la misma id de tema
   @Get(headers: const {'Content-Language': 'es-ES', 'charset': 'UTF-8'})
-  //@WrapPostgresDb(campusConnection) // ignore: const_with_non_constant_argument
-  //@WrapEncodeToJson()
-  @Wrap(const [#jsonEncoder,#postgresDb])
+  @Wrap(const [#jsonEncoder, #postgresDb])
   Future<List<Map>> getAll(@Input(PostgresDb) Connection db,
       {int offset: 0,
       int limit: 10,
@@ -54,28 +52,22 @@ class ContenidoRouteGroup{
       'tema': tema,
       'tipo': tipo
     };
-    return bean.findWithOptionals(limit, offset, parameters);
+    return bean.findWithOptionals(limit, offset, parameters: parameters);
   }
 
   ///Devuelve un contenido por id
   @Get(path: '/:id', pathRegEx: const {'id': r'^[0-9]+$'})
-  //@WrapPostgresDb(campusConnection) // ignore: const_with_non_constant_argument
-  //@WrapEncodeMapToJson()
-  @Wrap(const [#jsonEncoder,#postgresDb])
+  @Wrap(const [#jsonEncoder, #postgresDb])
   Future<Map> getById(@Input(PostgresDb) Connection db, int id) async {
     Adapter _adapter = new PgAdapter.FromConnection(db);
     bean = new ContenidoBean(_adapter);
-    /*Map stream = await bean.findById(id);
-    return stream.toList();*/
     return await bean.findById(id);
   }
 
   ///Devuelve el numero de contenidos existentes
   @Get(path: '/count')
-  //@WrapPostgresDb(campusConnection) // ignore: const_with_non_constant_argument
-  //@WrapEncodeMapToJson()
-  @Wrap(const [#jsonEncoder,#postgresDb])
-  Future<List> getCount(@Input(PostgresDb) Connection db,
+  @Wrap(const [#jsonMapEncoder, #postgresDb])
+  Future<Map> getCount(@Input(PostgresDb) Connection db,
       {int formato,
       int evento,
       int plataforma,
@@ -92,13 +84,13 @@ class ContenidoRouteGroup{
     };
     Adapter _adapter = new PgAdapter.FromConnection(db);
     bean = new ContenidoBean(_adapter);
-    return await bean.getCount(parameters);
+    return await bean.getCount(parameters: parameters);
   }
 }
 
 ///Grupo de rutas de evento
 @RouteGroup(path: '/evento')
-class EventoRouteGroup{
+class EventoRouteGroup {
   EventoBean bean;
   WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
   WrapPostgresDb postgresDb() => new WrapPostgresDb(campusConnection);
@@ -106,9 +98,7 @@ class EventoRouteGroup{
 
   ///devuelve todos los eventos
   @Get()
-  //@WrapPostgresDb(campusConnection)
-  //@WrapEncodeJsonableList()
-  @Wrap(const [#jsonEncoder,#postgresDb])
+  @Wrap(const [#jsonEncoder, #postgresDb])
   Future<List> getAll(@Input(PostgresDb) Connection db) async {
     Adapter _adapter = new PgAdapter.FromConnection(db);
     bean = new EventoBean(_adapter);
@@ -118,9 +108,7 @@ class EventoRouteGroup{
 
   ///devuelve un evento por id
   @Get(path: '/:id', pathRegEx: const {'id': r'^[0-9]+$'})
-  //@WrapPostgresDb(campusConnection) // ignore: const_with_non_constant_argument
-  //@WrapEncodeMapToJson()
-  @Wrap(const [#jsonEncoder,#postgresDb])
+  @Wrap(const [#jsonEncoder, #postgresDb])
   Future<List> getById(@Input(PostgresDb) Connection db, int id) async {
     Adapter _adapter = new PgAdapter.FromConnection(db);
     bean = new EventoBean(_adapter);
@@ -131,7 +119,7 @@ class EventoRouteGroup{
 
 ///Grupo de rutas de formato
 @RouteGroup(path: '/formato')
-class FormatoRouteGroup{
+class FormatoRouteGroup {
   FormatoBean bean;
   WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
   WrapPostgresDb postgresDb() => new WrapPostgresDb(campusConnection);
@@ -139,9 +127,7 @@ class FormatoRouteGroup{
 
   ///devuelve todos los formatos
   @Get()
-  //@WrapPostgresDb(campusConnection) // ignore: const_with_non_constant_argument
-  //@WrapEncodeJsonableList()
-  @Wrap(const [#jsonableList,#postgresDb])
+  @Wrap(const [#jsonableList, #postgresDb])
   Future<List> getAll(@Input(PostgresDb) Connection db) async {
     Adapter _adapter = new PgAdapter.FromConnection(db);
     bean = new FormatoBean(_adapter);
@@ -151,9 +137,7 @@ class FormatoRouteGroup{
 
   ///devuelve un formato por id
   @Get(path: '/:id', pathRegEx: const {'id': r'^[0-9]+$'})
-  //@WrapPostgresDb(campusConnection) // ignore: const_with_non_constant_argument
-  //@WrapEncodeMapToJson()
-  @Wrap(const [#jsonEncoder,#postgresDb])
+  @Wrap(const [#jsonEncoder, #postgresDb])
   Future<List> getById(@Input(PostgresDb) Connection db, int id) async {
     Adapter _adapter = new PgAdapter.FromConnection(db);
     bean = new FormatoBean(_adapter);
@@ -164,7 +148,7 @@ class FormatoRouteGroup{
 
 ///Grupo de rutas de plataforma
 @RouteGroup(path: '/plataforma')
-class PlataformaRouteGroup{
+class PlataformaRouteGroup {
   PlataformaBean bean;
   WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
   WrapPostgresDb postgresDb() => new WrapPostgresDb(campusConnection);
@@ -172,9 +156,7 @@ class PlataformaRouteGroup{
 
   ///devuelve todas las plataformas
   @Get()
-  //@WrapPostgresDb(campusConnection) // ignore: const_with_non_constant_argument
-  //@WrapEncodeJsonableList()
-  @Wrap(const [#jsonableList,#postgresDb])
+  @Wrap(const [#jsonableList, #postgresDb])
   Future<List> getAll(@Input(PostgresDb) Connection db) async {
     Adapter _adapter = new PgAdapter.FromConnection(db);
     bean = new PlataformaBean(_adapter);
@@ -184,9 +166,7 @@ class PlataformaRouteGroup{
 
   ///devuelve una plataforma por id
   @Get(path: '/:id', pathRegEx: const {'id': r'^[0-9]+$'})
-  //@WrapPostgresDb(campusConnection) // ignore: const_with_non_constant_argument
-  //@WrapEncodeMapToJson()
-  @Wrap(const [#jsonEncoder,#postgresDb])
+  @Wrap(const [#jsonEncoder, #postgresDb])
   Future<List> getById(@Input(PostgresDb) Connection db, int id) async {
     Adapter _adapter = new PgAdapter.FromConnection(db);
     bean = new PlataformaBean(_adapter);
@@ -197,7 +177,7 @@ class PlataformaRouteGroup{
 
 ///Grupo de rutas de tema
 @RouteGroup(path: '/tema')
-class TemaRouteGroup{
+class TemaRouteGroup {
   TemaBean bean;
   WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
   WrapPostgresDb postgresDb() => new WrapPostgresDb(campusConnection);
@@ -205,9 +185,7 @@ class TemaRouteGroup{
 
   ///devuelve todos los temas
   @Get()
-  //@WrapPostgresDb(campusConnection) // ignore: const_with_non_constant_argument
-  //@WrapEncodeJsonableList()
-  @Wrap(const [#jsonableList,#postgresDb])
+  @Wrap(const [#jsonableList, #postgresDb])
   Future<List> getAll(@Input(PostgresDb) Connection db) async {
     Adapter _adapter = new PgAdapter.FromConnection(db);
     bean = new TemaBean(_adapter);
@@ -217,9 +195,7 @@ class TemaRouteGroup{
 
   ///devuelve un tema por id
   @Get(path: '/:id', pathRegEx: const {'id': r'^[0-9]+$'})
-  //@WrapPostgresDb(campusConnection) // ignore: const_with_non_constant_argument
-  //@WrapEncodeMapToJson()
-  @Wrap(const [#jsonEncoder,#postgresDb])
+  @Wrap(const [#jsonEncoder, #postgresDb])
   Future<List> getById(@Input(PostgresDb) Connection db, int id) async {
     Adapter _adapter = new PgAdapter.FromConnection(db);
     bean = new TemaBean(_adapter);
@@ -230,7 +206,7 @@ class TemaRouteGroup{
 
 ///Grupo de rutas de tipo
 @RouteGroup(path: '/tipo')
-class TipoRouteGroup{
+class TipoRouteGroup {
   TipoBean bean;
   WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
   WrapPostgresDb postgresDb() => new WrapPostgresDb(campusConnection);
@@ -238,9 +214,7 @@ class TipoRouteGroup{
 
   ///devuelve todos los tipos
   @Get()
-  //@WrapPostgresDb(campusConnection) // ignore: const_with_non_constant_argument
-  //@WrapEncodeJsonableList()
-  @Wrap(const [#jsonableList,#postgresDb])
+  @Wrap(const [#jsonableList, #postgresDb])
   Future<List> getAll(@Input(PostgresDb) Connection db) async {
     Adapter _adapter = new PgAdapter.FromConnection(db);
     bean = new TipoBean(_adapter);
@@ -250,9 +224,7 @@ class TipoRouteGroup{
 
   ///devuelve un tipo por id
   @Get(path: '/:id', pathRegEx: const {'id': r'^[0-9]+$'})
-  //@WrapPostgresDb(campusConnection) // ignore: const_with_non_constant_argument
-  //@WrapEncodeMapToJson()
-  @Wrap(const [#jsonEncoder,#postgresDb])
+  @Wrap(const [#jsonEncoder, #postgresDb])
   Future<List> getById(@Input(PostgresDb) Connection db, int id) async {
     Adapter _adapter = new PgAdapter.FromConnection(db);
     bean = new TipoBean(_adapter);
@@ -263,17 +235,14 @@ class TipoRouteGroup{
 
 ///Grupo de rutas de tipo
 @RouteGroup(path: '/ponente')
-class PonenteRouteGroup{
+class PonenteRouteGroup {
   ContenidoBean bean;
-  WrapEncodeToJson jsonEncoder() => new WrapEncodeToJson();
   WrapPostgresDb postgresDb() => new WrapPostgresDb(campusConnection);
   WrapEncodeJsonableList jsonableList() => new WrapEncodeJsonableList();
 
   ///devuelve todos los tipos
   @Get()
-  //@WrapPostgresDb(campusConnection) // ignore: const_with_non_constant_argument
-  //@WrapEncodeJsonableList()
-  @Wrap(const [#jsonableList,#postgresDb])
+  @Wrap(const [#jsonableList, #postgresDb])
   Future<List> getAll(@Input(PostgresDb) Connection db) async {
     Adapter _adapter = new PgAdapter.FromConnection(db);
     bean = new ContenidoBean(_adapter);
@@ -287,7 +256,7 @@ class PonenteRouteGroup{
 /// Clase general que contiene la creacion de la url de conexion a la base de
 /// datos y contiene todos los RouteGroups de la api
 @Api(path: '/campus')
-class CampusApi{
+class CampusApi {
   CampusApi(String user, String pass, String url, String name) {
     if (pass != null) {
       campusConnection = 'postgres://$user:$pass@$url/$name';
