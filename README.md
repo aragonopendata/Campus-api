@@ -22,6 +22,8 @@ dbuser: '<Usuario de la base de datos>'
 dbpass: '<Contraseña de la base de datos>'
 dburl: '<Url de la base de datos>'
 dbname: '<Nombre de la base de datos>'
+
+test_svport: '<Puerto preferido para el servidor de tests>'
 ```
 
 5.Obtenemos todas las dependencias necesarioas
@@ -43,6 +45,18 @@ dart bin/server.dart -s settings.yaml
 ```
 localhost:<svport>/campus/version
 ```
+##Probar la aplicacion
+
+Podemos testear la aplicacion para comprobar que toda la aplicacion funciona correctamente, los test basicos que ofrecemos cubren los testeos de todas las rutas, que los beans esten funcionando correctamente y que los modelos esten serializando de la forma correcta.
+
+1.Modificamos en el archivo ```settings.yaml``` la variable ```test_svport``` y le indicamos en que puerto ejecutar un servidor para pruebas ( Actualmente necesitamos que la base de datos este iniciada, en un futuro no sera neceseraio tener una base de datos real para poder probar al aplicacion )
+
+2.Ejecutamos el testeo desde la raiz de nuestro proyecto
+```
+pub run test test/test_all.dart
+```
+
+Para mas informacion sobre la libreria de testeo de dart puedes acceder a su documentacion [aqui](https://github.com/dart-lang/test)
 
 ##Documentacion
 Para documentacion mas detallada puedes dirigirte a la wiki o a la documentacion oficial de [Jaguar](https://jaguar-dart.github.io/)
